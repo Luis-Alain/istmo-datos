@@ -1,5 +1,4 @@
-"""Transformación: reglas de calidad R1-R6, venta neta y estado por registro.
-"""
+"""Transformación: reglas de calidad R1-R6, venta neta y estado por registro."""
 
 import pandas as pd
 
