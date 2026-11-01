@@ -1,0 +1,36 @@
+[project]
+name = "istmo-datos"
+version = "0.1.0"
+description = "Taller Unidad 3: integración, calidad y análisis de ventas de Distribuidora Istmo S.A."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "openpyxl>=3.1.5",
+    "pandas>=2.2",
+    "plotly>=5.24",
+    "streamlit>=1.50",
+]
+
+[project.scripts]
+etl = "istmo_datos.etl:main"
+
+[build-system]
+requires = ["uv_build>=0.11.32,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0",
+    "pytest>=8.0",
+    "ruff>=0.8",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
