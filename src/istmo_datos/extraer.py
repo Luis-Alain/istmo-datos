@@ -1,4 +1,4 @@
-"""Extracción: lee la hoja de Excel tal cual, todo como texto."""
+"""Extracción: lee la hoja de Excel como texto."""
 
 from pathlib import Path
 
@@ -8,7 +8,7 @@ from istmo_datos.config import RAW
 
 
 def extraer(ruta: Path = RAW) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Devuelve (ventas_crudas, metas). Nada se corrige aquí."""
+    """Devuelve (ventas_crudas, metas)."""
     ventas = pd.read_excel(ruta, sheet_name="ventas", dtype=str, keep_default_na=False)
     ventas.columns = [c.strip().lower().replace(" ", "_") for c in ventas.columns]
     ventas["fila_origen"] = ventas.index + 2  # fila real en la hoja (fila 1 = encabezado)

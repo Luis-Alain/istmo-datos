@@ -1,6 +1,4 @@
 """Transformación: reglas de calidad R1-R6, venta neta y estado por registro.
-
-Principio: no se borra nada. Cada registro conserva un estado y un motivo.
 """
 
 import pandas as pd
@@ -32,7 +30,7 @@ def limpiar_texto(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def cargar(ruta) -> pd.DataFrame:
-    """Atajo: extrae y limpia tipos."""
+    """extrae y limpia tipos."""
     from istmo_datos.extraer import extraer
 
     ventas, _ = extraer(ruta)
@@ -72,27 +70,28 @@ def aplicar_reglas(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
                 "revision": "ABIERTA",
             }
         )
-        if ORDEN[estado] > ORDEN[df.at[i, "estado"]]:
+        if ORDEN[estado] > ORDEN[str(df.at[i, "estado"])]:
             df.at[i, "estado"] = estado
-        df.at[i, "motivo"] = (df.at[i, "motivo"] + "; " + motivo).strip("; ")
+        df.at[i, "motivo"] = (str(df.at[i, "motivo"]) + "; " + motivo).strip("; ")
 
-    for i in df.index:
+    # El índice es 0..n-1 tras reset_index, así que la posición coincide con la etiqueta.
+    for i, fila in enumerate(df.to_dict("records")):
         if duplicada[i]:
             registrar(i, "R1", "EXCLUIDO_PROVISIONAL", "Fila duplicada; se conserva la primera")
-        cantidad = df.at[i, "cantidad"]
+        cantidad = fila["cantidad"]
         if pd.notna(cantidad) and cantidad == 0:
             registrar(i, "R2", "EXCLUIDO_PROVISIONAL", "Cantidad cero")
         elif pd.notna(cantidad) and cantidad < 0:
             registrar(i, "R3", "PENDIENTE", "Cantidad negativa: validar si es devolución")
         for campo in ["sucursal", "producto", "fecha", "precio"]:
-            valor = df.at[i, campo]
+            valor = fila[campo]
             if pd.isna(valor) or valor == "":
                 registrar(i, "R4", "PENDIENTE", f"Campo vacío: {campo}")
-        sucursal = df.at[i, "sucursal"]
+        sucursal = fila["sucursal"]
         if sucursal != "" and not pd.isna(sucursal) and sucursal not in SUCURSALES_CONOCIDAS:
             registrar(i, "R5", "PENDIENTE", f"Sucursal no reconocida: {sucursal}")
-        bruto = df.at[i, "cantidad"] * df.at[i, "precio"]
-        if pd.notna(bruto) and bruto > 0 and df.at[i, "descuento"] > bruto:
+        bruto = fila["cantidad"] * fila["precio"]
+        if pd.notna(bruto) and bruto > 0 and fila["descuento"] > bruto:
             registrar(i, "R6", "PENDIENTE", "Descuento mayor al valor bruto")
 
     columnas_inc = [

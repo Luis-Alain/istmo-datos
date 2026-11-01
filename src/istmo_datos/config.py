@@ -10,8 +10,7 @@ PROCESADOS = RAIZ / "data" / "processed"
 DB = RAIZ / "db" / "istmo.db"
 SCHEMA = RAIZ / "db" / "schema.sql"
 
-# Catálogo de sucursales reconocidas. Solo las que aparecen con datos/metas en el taller:
-# no se inventan las otras 9 sucursales de la empresa.
+# Catálogo de sucursales reconocidas.
 SUCURSALES_CONOCIDAS = frozenset({"David Centro", "Boquete", "Bugaba"})
 
 # Valores de texto que significan "campo vacío" en la hoja de origen.

@@ -71,22 +71,22 @@ def cargar_base(
 
         # 4. Hechos.
         filas = []
-        for r in cargables.itertuples():
+        for r in cargables.to_dict("records"):
             filas.append(
                 (
-                    r.id_venta,
+                    r["id_venta"],
                     "ERP",
-                    int(r.fila_origen),
-                    int(r.fecha.strftime("%Y%m%d")),
-                    id_sucursal.get(r.sucursal, 0),
-                    r.sucursal,
-                    id_producto[r.producto],
-                    int(r.cantidad),
-                    float(r.precio),
-                    float(_nan_a_none(r.descuento) or 0),
-                    float(r.venta_neta),
-                    r.estado,
-                    r.motivo,
+                    int(r["fila_origen"]),
+                    int(r["fecha"].strftime("%Y%m%d")),
+                    id_sucursal.get(r["sucursal"], 0),
+                    r["sucursal"],
+                    id_producto[r["producto"]],
+                    int(r["cantidad"]),
+                    float(r["precio"]),
+                    float(_nan_a_none(r["descuento"]) or 0),
+                    float(r["venta_neta"]),
+                    r["estado"],
+                    r["motivo"],
                 )
             )
         con.executemany(
@@ -98,11 +98,11 @@ def cargar_base(
         )
 
         # 5. Metas (solo sucursales con meta entregada).
-        for r in metas.itertuples():
-            if r.sucursal in id_sucursal:
+        for r in metas.to_dict("records"):
+            if r["sucursal"] in id_sucursal:
                 con.execute(
                     "INSERT INTO fact_meta VALUES (?, ?, ?, ?)",
-                    (id_sucursal[r.sucursal], ANIO_META, MES_META, float(r.meta_mensual)),
+                    (id_sucursal[r["sucursal"]], ANIO_META, MES_META, float(r["meta_mensual"])),
                 )
 
         # 6. Incidencias.
