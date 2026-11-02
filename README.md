@@ -7,7 +7,26 @@ Flujo: **Excel (datos crudos) → Python (extracción) → reglas de calidad →
 ## Requisitos
 
 - [uv](https://docs.astral.sh/uv/) (instala Python 3.12 automáticamente si hace falta)
+  - macOS / Linux:
+
+    ```bash
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    ```
+
+  - Windows (PowerShell):
+
+    ```powershell
+    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+    ```
+
+  - Con Homebrew (macOS): `brew install uv`
+  - Verificar la instalación: `uv --version`
+  - Guía completa: [docs.astral.sh/uv/getting-started/installation](https://docs.astral.sh/uv/getting-started/installation/)
 - Docker (opcional)
+- Extensiones recomendadas para VS Code:
+  - [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) (`charliermarsh.ruff`): lint y formato, el mismo que usa el proyecto
+  - [Excel Viewer](https://marketplace.visualstudio.com/items?itemName=GrapeCity.gc-excelviewer) (`GrapeCity.gc-excelviewer`): ver los archivos `.xlsx` de `data/raw/` dentro del editor
+  - [SQLite Viewer](https://marketplace.visualstudio.com/items?itemName=qwtel.sqlite-viewer) (`qwtel.sqlite-viewer`): explorar las tablas de `db/istmo.db`
 
 ## Uso
 
